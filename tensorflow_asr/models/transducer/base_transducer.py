@@ -371,6 +371,7 @@ class Transducer(BaseModel):
 
     # -------------------------------- INFERENCES -------------------------------------
 
+    @tf.function
     def encoder_inference(
         self,
         features: tf.Tensor,
@@ -439,6 +440,7 @@ class Transducer(BaseModel):
         encoded_length = math_util.get_reduced_length(inputs["inputs_length"], self.time_reduction_factor)
         return self._perform_greedy_batch(encoded=encoded, encoded_length=encoded_length)
 
+    @tf.function
     def recognize_tflite(
         self,
         signal,
@@ -463,6 +465,7 @@ class Transducer(BaseModel):
         transcript = self.text_featurizer.indices2upoints(hypothesis.prediction)
         return transcript, hypothesis.index, hypothesis.states
 
+    @tf.function
     def recognize_tflite_with_timestamp(
         self,
         signal,
@@ -491,6 +494,7 @@ class Transducer(BaseModel):
 
         return non_blank_transcript, non_blank_stime, non_blank_etime, hypothesis.index, hypothesis.states
 
+    @tf.function
     def _perform_greedy_batch(
         self,
         encoded: tf.Tensor,
@@ -536,6 +540,7 @@ class Transducer(BaseModel):
             decoded = math_util.pad_prediction_tfarray(decoded, blank=self.text_featurizer.blank)
             return self.text_featurizer.iextract(decoded.stack())
 
+    @tf.function
     def _perform_greedy(
         self,
         encoded: tf.Tensor,
@@ -692,6 +697,7 @@ class Transducer(BaseModel):
             lm=lm,
         )
 
+    @tf.function
     def _perform_beam_search_batch(
         self,
         encoded: tf.Tensor,

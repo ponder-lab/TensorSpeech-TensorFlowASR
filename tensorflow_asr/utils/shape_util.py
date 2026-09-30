@@ -15,6 +15,7 @@
 import tensorflow as tf
 
 
+@tf.function
 def shape_list(x, out_type=tf.int32):
     """Deal with dynamic shape in tensorflow cleanly."""
     static = x.shape.as_list()

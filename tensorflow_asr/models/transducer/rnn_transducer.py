@@ -269,6 +269,7 @@ class RnnTransducer(Transducer):
         self.time_reduction_factor = self.encoder.time_reduction_factor
         self.dmodel = encoder_dmodel
 
+    @tf.function
     def encoder_inference(
         self,
         features: tf.Tensor,
@@ -336,6 +337,7 @@ class RnnTransducer(Transducer):
         transcript = self.text_featurizer.indices2upoints(hypothesis.prediction)
         return transcript, hypothesis.index, new_encoder_states, hypothesis.states
 
+    @tf.function
     def recognize_tflite_with_timestamp(
         self,
         signal,

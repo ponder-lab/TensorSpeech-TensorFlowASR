@@ -19,6 +19,7 @@ import tensorflow as tf
 from tensorflow_asr.utils import shape_util
 
 
+@tf.function
 def log10(x):
     numerator = tf.math.log(x)
     denominator = tf.math.log(tf.constant(10, dtype=numerator.dtype))
@@ -131,6 +132,7 @@ def find_max_length_prediction_tfarray(
         return max_length
 
 
+@tf.function
 def pad_prediction_tfarray(
     tfarray: tf.TensorArray,
     blank: int or tf.Tensor,
