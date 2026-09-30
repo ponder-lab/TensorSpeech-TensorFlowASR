@@ -4,6 +4,7 @@ import tensorflow as tf
 
 
 class WarpRNNTTest(tf.test.TestCase):
+    @tf.function(input_signature=[tf.TensorSpec(shape=(2,), dtype=tf.float32), tf.TensorSpec(shape=(2, 2), dtype=tf.int32), tf.TensorSpec(shape=(2,), dtype=tf.int32), tf.TensorSpec(shape=(2,), dtype=tf.int32), tf.TensorSpec(shape=(2,), dtype=tf.float32), tf.TensorSpec(shape=(2,), dtype=tf.float32)])
     def _run_rnnt(self, acts, labels, input_lengths, label_lengths,
                     expected_costs, expected_grads, use_gpu=False):
         self.assertEquals(acts.shape, expected_grads.shape)
