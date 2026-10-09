@@ -15,6 +15,7 @@
 import os
 import fire
 import math
+import timeit
 from tensorflow_asr.utils import env_util
 
 logger = env_util.setup_environment()
@@ -24,6 +25,7 @@ from tensorflow_asr.configs.config import Config
 from tensorflow_asr.helpers import featurizer_helpers, dataset_helpers
 from tensorflow_asr.models.transducer.conformer import Conformer
 from tensorflow_asr.optimizers.schedules import TransformerSchedule
+from scripts.utils import write_csv
 
 
 DEFAULT_YAML = os.path.join(os.path.abspath(os.path.dirname(__file__)), "config.yml")
@@ -74,12 +76,17 @@ def main(
         batch_size=bs,
     )
 
+    start_time = timeit.default_timer()
+    skipped_time = 0
+
     with strategy.scope():
         conformer = Conformer(**config.model_config, vocabulary_size=text_featurizer.num_classes)
         conformer.make(speech_featurizer.shape, prediction_shape=text_featurizer.prepand_shape, batch_size=global_batch_size)
         if pretrained:
             conformer.load_weights(pretrained, by_name=True, skip_mismatch=True)
+        io_time = timeit.default_timer()
         conformer.summary(line_length=100)
+        skipped_time += timeit.default_timer() - io_time
         optimizer = tf.keras.optimizers.Adam(
             TransformerSchedule(
                 d_model=conformer.dmodel,
@@ -108,6 +115,14 @@ def main(
         callbacks=callbacks,
         steps_per_epoch=train_dataset.total_steps,
         validation_steps=eval_dataset.total_steps if eval_data_loader else None,
+    )
+
+    time = timeit.default_timer() - start_time - skipped_time
+    write_csv(
+        __file__,
+        epochs=config.learning_config.running_config.num_epochs,
+        loss=conformer.history.history["loss"][-1],
+        time=time,
     )
 
 
