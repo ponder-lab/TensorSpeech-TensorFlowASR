@@ -12,7 +12,9 @@
 #   LibriSpeech/<subset>/transcripts.tsv   create_librispeech_trans.py's output for that subset
 #   conformer-config.yml             examples/conformer/config.yml with its H:/ dataset prefix replaced
 #                                    by the extracted tree and its D:/ output prefix by ./my_train
-#                                    (in this project's .gitignore)
+#                                    (in this project's .gitignore), and its training-time writes
+#                                    switched off: no checkpoint (save_freq past any run's length),
+#                                    and TensorBoard without histograms, graph, images or profiling
 # Idempotent: an extracted subset and a written transcript are kept and not redone.
 
 set -euo pipefail
@@ -44,9 +46,18 @@ done
 config="$LIBRISPEECH_DIR/conformer-config.yml"
 sed -e "s|H:/MLDL/Datasets/ASR/Raw/LibriSpeech/|$LIBRISPEECH_DIR/LibriSpeech/|" \
 	-e "s|D:/Models/local/conformer/|./my_train/conformer/|" \
+	-e "s|^\(      save_freq:\) epoch$|\1 1000000000|" \
+	-e "s|^\(      histogram_freq:\) 1$|\1 0|" \
+	-e "s|^\(      write_graph:\) True$|\1 False|" \
+	-e "s|^\(      write_images:\) True$|\1 False|" \
+	-e "s|^\(      profile_batch:\) 2$|\1 0|" \
 	examples/conformer/config.yml > "$config.partial"
 if grep -qE '(H|D):/' "$config.partial"; then
 	echo "setup.sh: examples/conformer/config.yml has a Windows path this script does not map." >&2
+	exit 1
+fi
+if grep -qE '^ +(save_freq: epoch|histogram_freq: [1-9]|write_graph: True|write_images: True|profile_batch: [1-9])' "$config.partial"; then
+	echo "setup.sh: examples/conformer/config.yml has a training-time write this script does not switch off." >&2
 	exit 1
 fi
 mv "$config.partial" "$config"
