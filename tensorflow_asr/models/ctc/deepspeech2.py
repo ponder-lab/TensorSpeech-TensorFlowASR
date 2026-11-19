@@ -21,6 +21,7 @@ from tensorflow_asr.models.ctc.base_ctc import CtcModel
 
 
 class Reshape(tf.keras.layers.Layer):
+    @tf.function
     def call(
         self,
         inputs,
@@ -53,6 +54,7 @@ class ConvBlock(tf.keras.layers.Layer):
         self.relu = tf.keras.layers.ReLU(name=f"{self.name}_relu")
         self.do = tf.keras.layers.Dropout(dropout, name=f"{self.name}_dropout")
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -113,6 +115,7 @@ class ConvModule(tf.keras.Model):
         for s in strides:
             self.reduction_factor *= s[0]
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -168,6 +171,7 @@ class RnnBlock(tf.keras.layers.Layer):
                 name=f"{self.name}_rowconv",
             )
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -214,6 +218,7 @@ class RnnModule(tf.keras.Model):
             for i in range(nlayers)
         ]
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -246,6 +251,7 @@ class FcBlock(tf.keras.layers.Layer):
         self.relu = tf.keras.layers.ReLU(name=f"{self.name}_relu")
         self.do = tf.keras.layers.Dropout(dropout, name=f"{self.name}_dropout")
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -279,6 +285,7 @@ class FcModule(tf.keras.Model):
 
         self.blocks = [FcBlock(units=units, dropout=dropout, name=f"{self.name}_block_{i}") for i in range(nlayers)]
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -355,6 +362,7 @@ class DeepSpeech2Encoder(tf.keras.Model):
         self.fc_module.summary(line_length=line_length, **kwargs)
         super().summary(line_length=line_length, **kwargs)
 
+    @tf.function
     def call(
         self,
         inputs,

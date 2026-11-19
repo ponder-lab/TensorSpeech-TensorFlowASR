@@ -115,6 +115,7 @@ class TextFeaturizer(metaclass=abc.ABCMeta):
             blank_like = self.blank * tf.ones_like(indices, dtype=tf.int32)
             return tf.where(indices == minus_one, blank_like, indices)
 
+    @tf.function
     def prepand_blank(
         self,
         text: tf.Tensor,
@@ -525,6 +526,7 @@ class SentencePieceFeaturizer(TextFeaturizer):
         indices = self.model.encode_as_ids(text)
         return tf.convert_to_tensor(indices, dtype=tf.int32)
 
+    @tf.function(input_signature=[tf.TensorSpec(shape=None, dtype=tf.int32)])
     def iextract(
         self,
         indices: tf.Tensor,
