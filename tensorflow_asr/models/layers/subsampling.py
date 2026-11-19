@@ -34,6 +34,7 @@ class TimeReduction(tf.keras.layers.Layer):
         new_time = tf.math.ceil(time / self.time_reduction_factor) * self.time_reduction_factor
         return tf.cast(new_time, dtype=tf.int32) - time
 
+    @tf.function
     def call(
         self,
         inputs,

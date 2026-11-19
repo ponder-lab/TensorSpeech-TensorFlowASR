@@ -44,10 +44,12 @@ class Embedding(tf.keras.layers.Layer):
         )
         self.built = True
 
+    @tf.function
     def call(self, inputs):
         outputs = tf.cast(inputs, dtype=tf.int32)
         return tf.nn.embedding_lookup(self.embeddings, outputs)
 
+    @tf.function
     def recognize_tflite(self, inputs):
         outputs = tf.cast(tf.expand_dims(inputs, axis=-1), dtype=tf.int32)
         return tf.gather_nd(self.embeddings, outputs)  # https://github.com/tensorflow/tensorflow/issues/42410

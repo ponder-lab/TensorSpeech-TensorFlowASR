@@ -102,6 +102,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         else:
             self.projection_bias = None
 
+    @tf.function
     def call_qkv(
         self,
         query,
@@ -121,6 +122,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
 
         return query, key, value
 
+    @tf.function
     def call_attention(
         self,
         query,
@@ -165,6 +167,7 @@ class MultiHeadAttention(tf.keras.layers.Layer):
 
         return output, attn_coef
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -264,6 +267,7 @@ class RelPositionMultiHeadAttention(MultiHeadAttention):
         super(RelPositionMultiHeadAttention, self).build(input_shape[:-1])
 
     @staticmethod
+    @tf.function
     def relative_shift(x):
         x_shape = tf.shape(x)
         x = tf.pad(x, [[0, 0], [0, 0], [0, 0], [1, 0]])
@@ -271,6 +275,7 @@ class RelPositionMultiHeadAttention(MultiHeadAttention):
         x = tf.reshape(x[:, :, 1:, :], x_shape)
         return x
 
+    @tf.function
     def call(
         self,
         inputs,
