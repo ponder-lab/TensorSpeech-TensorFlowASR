@@ -267,7 +267,7 @@ class RelPositionMultiHeadAttention(MultiHeadAttention):
         super(RelPositionMultiHeadAttention, self).build(input_shape[:-1])
 
     @staticmethod
-    @tf.function(input_signature=[tf.TensorSpec(shape=None, dtype=tf.float32)])
+    @tf.function(reduce_retracing=True)
     def relative_shift(x):
         x_shape = tf.shape(x)
         x = tf.pad(x, [[0, 0], [0, 0], [0, 0], [1, 0]])
