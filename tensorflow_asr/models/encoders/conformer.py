@@ -401,6 +401,7 @@ class ConformerEncoder(tf.keras.Model):
             )
             self.conformer_blocks.append(conformer_block)
 
+    @tf.function
     def call(
         self,
         inputs,

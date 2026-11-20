@@ -129,6 +129,7 @@ def extract_diagonals(
     return tf.transpose(diagonals, perm=[1, 0, 2])
 
 
+@tf.function
 def transition_probs(
     one_hot_labels,
     log_probs,
@@ -366,6 +367,7 @@ def compute_rnnt_loss_and_grad_helper(logits, labels, label_length, logit_length
     return loss, grads_logits
 
 
+@tf.function
 def rnnt_loss_tf(
     logits,
     labels,

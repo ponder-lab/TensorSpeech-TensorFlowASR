@@ -19,6 +19,7 @@ from tensorflow_asr.models.ctc.base_ctc import CtcModel
 
 
 class Reshape(tf.keras.layers.Layer):
+    @tf.function
     def call(self, inputs):
         return math_util.merge_two_last_dims(inputs)
 
@@ -51,6 +52,7 @@ class JasperSubBlock(tf.keras.layers.Layer):
         self.do = tf.keras.layers.Dropout(dropout, name=f"{self.name}_dropout")
         self.reduction_factor = strides
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -93,6 +95,7 @@ class JasperResidual(tf.keras.layers.Layer):
         )
         self.bn = tf.keras.layers.BatchNormalization(name=f"{self.name}_bn")
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -317,6 +320,7 @@ class JasperEncoder(tf.keras.Model):
             name=f"{self.name}_third_block",
         )
 
+    @tf.function
     def call(
         self,
         inputs,

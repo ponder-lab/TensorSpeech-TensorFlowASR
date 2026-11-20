@@ -85,6 +85,7 @@ class CtcModel(BaseModel):
         self.speech_featurizer = speech_featurizer
         self.text_featurizer = text_featurizer
 
+    @tf.function
     def call(
         self,
         inputs,

@@ -74,6 +74,7 @@ def count_non_blank(
     )
 
 
+@tf.function
 def merge_two_last_dims(x):
     b, _, f, c = shape_util.shape_list(x)
     return tf.reshape(x, shape=[b, -1, f * c])
@@ -132,7 +133,6 @@ def find_max_length_prediction_tfarray(
         return max_length
 
 
-@tf.function
 def pad_prediction_tfarray(
     tfarray: tf.TensorArray,
     blank: int or tf.Tensor,
