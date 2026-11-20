@@ -175,7 +175,6 @@ class ASRDataset(BaseDataset):
                 fn, inp=[path, audio, indices], Tout=[tf.string, tf.float32, tf.int32, tf.int32, tf.int32, tf.int32, tf.int32]
             )
 
-    @tf.function
     def tf_preprocess(self, path: tf.Tensor, audio: tf.Tensor, indices: tf.Tensor):
         with tf.device("/CPU:0"):
             signal = tf_read_raw_audio(audio, self.speech_featurizer.sample_rate)
@@ -192,7 +191,6 @@ class ASRDataset(BaseDataset):
 
             return path, features, input_length, label, label_length, prediction, prediction_length
 
-    @tf.function
     def parse(self, path: tf.Tensor, audio: tf.Tensor, indices: tf.Tensor):
         """
         Returns:
@@ -303,7 +301,6 @@ class ASRTFRecordDataset(ASRDataset):
     def write_tfrecord_file(splitted_entries):
         shard_path, entries = splitted_entries
 
-        @tf.function
         def parse(record):
             def fn(path, indices):
                 audio = load_and_convert_to_wav(path.decode("utf-8")).numpy()
