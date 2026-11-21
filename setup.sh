@@ -53,6 +53,10 @@ sed -e "s|H:/MLDL/Datasets/ASR/Raw/LibriSpeech/|$LIBRISPEECH_DIR/LibriSpeech/|" 
 	-e "s|^\(      profile_batch:\) 2$|\1 0|" \
 	-e "s|^    num_epochs: 50$|    num_epochs: 1|" \
 	examples/conformer/config.yml > "$config.partial"
+if ! grep -q '^    num_epochs: 1$' "$config.partial"; then
+	echo "setup.sh: examples/conformer/config.yml's num_epochs did not take the harness's bound of 1." >&2
+	exit 1
+fi
 if grep -qE '(H|D):/' "$config.partial"; then
 	echo "setup.sh: examples/conformer/config.yml has a Windows path this script does not map." >&2
 	exit 1
