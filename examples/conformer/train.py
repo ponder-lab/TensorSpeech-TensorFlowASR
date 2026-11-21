@@ -113,8 +113,8 @@ def main(
         epochs=config.learning_config.running_config.num_epochs,
         validation_data=eval_data_loader,
         callbacks=callbacks,
-        steps_per_epoch=train_dataset.total_steps,
-        validation_steps=eval_dataset.total_steps if eval_data_loader else None,
+        steps_per_epoch=min(50, train_dataset.total_steps),  # bound for the corpus harness (bound trial)
+        validation_steps=min(10, eval_dataset.total_steps) if eval_data_loader else None,
     )
 
     time = timeit.default_timer() - start_time - skipped_time
