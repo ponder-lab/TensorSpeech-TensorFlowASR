@@ -119,6 +119,7 @@ def normalize_audio_feature(
     return normalized
 
 
+@tf.function
 def tf_normalize_audio_features(
     audio_feature: tf.Tensor,
     per_frame=False,
@@ -145,6 +146,7 @@ def normalize_signal(
     return signal * gain
 
 
+@tf.function
 def tf_normalize_signal(
     signal: tf.Tensor,
 ) -> tf.Tensor:
@@ -169,6 +171,7 @@ def preemphasis(
     return np.append(signal[0], signal[1:] - coeff * signal[:-1])
 
 
+@tf.function
 def tf_preemphasis(
     signal: tf.Tensor,
     coeff=0.97,
@@ -509,6 +512,7 @@ class TFSpeechFeaturizer(SpeechFeaturizer):
         length = self.max_length if self.max_length > 0 else None
         return [length, self.num_feature_bins, 1]
 
+    @tf.function
     def stft(
         self,
         signal,
@@ -523,6 +527,7 @@ class TFSpeechFeaturizer(SpeechFeaturizer):
         framed_signals *= window
         return tf.square(tf.abs(tf.signal.rfft(framed_signals, [self.nfft])))
 
+    @tf.function
     def power_to_db(
         self,
         S,
@@ -546,6 +551,7 @@ class TFSpeechFeaturizer(SpeechFeaturizer):
         features = self.tf_extract(tf.convert_to_tensor(signal, dtype=tf.float32))
         return features.numpy()
 
+    @tf.function
     def tf_extract(
         self,
         signal: tf.Tensor,
@@ -580,6 +586,7 @@ class TFSpeechFeaturizer(SpeechFeaturizer):
 
         return features
 
+    @tf.function
     def compute_log_mel_spectrogram(
         self,
         signal,
@@ -595,6 +602,7 @@ class TFSpeechFeaturizer(SpeechFeaturizer):
         mel_spectrogram = tf.tensordot(spectrogram, linear_to_weight_matrix, 1)
         return self.power_to_db(mel_spectrogram)
 
+    @tf.function
     def compute_spectrogram(
         self,
         signal,
@@ -603,6 +611,7 @@ class TFSpeechFeaturizer(SpeechFeaturizer):
         spectrogram = self.power_to_db(S)
         return spectrogram[:, : self.num_feature_bins]
 
+    @tf.function
     def compute_mfcc(
         self,
         signal,
@@ -610,6 +619,7 @@ class TFSpeechFeaturizer(SpeechFeaturizer):
         log_mel_spectrogram = self.compute_log_mel_spectrogram(signal)
         return tf.signal.mfccs_from_log_mel_spectrograms(log_mel_spectrogram)
 
+    @tf.function
     def compute_log_gammatone_spectrogram(
         self,
         signal: np.ndarray,

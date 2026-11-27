@@ -19,6 +19,7 @@ import tensorflow as tf
 from tensorflow_asr.utils import shape_util
 
 
+@tf.function
 def log10(x):
     numerator = tf.math.log(x)
     denominator = tf.math.log(tf.constant(10, dtype=numerator.dtype))
@@ -73,6 +74,7 @@ def count_non_blank(
     )
 
 
+@tf.function
 def merge_two_last_dims(x):
     b, _, f, c = shape_util.shape_list(x)
     return tf.reshape(x, shape=[b, -1, f * c])
