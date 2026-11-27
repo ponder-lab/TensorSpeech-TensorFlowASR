@@ -82,6 +82,7 @@ class ContextNet(Transducer):
         for block in self.encoder.blocks:
             self.time_reduction_factor *= block.time_reduction_factor
 
+    @tf.function
     def call(
         self,
         inputs,

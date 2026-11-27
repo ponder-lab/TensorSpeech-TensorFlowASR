@@ -88,6 +88,7 @@ class TransducerPrediction(tf.keras.Model):
             states.append(tf.stack(rnn["rnn"].get_initial_state(tf.zeros([1, 1, 1], dtype=tf.float32)), axis=0))
         return tf.stack(states, axis=0)
 
+    @tf.function
     def call(self, inputs, training=False, **kwargs):
         # inputs has shape [B, U]
         # use tf.gather_nd instead of tf.gather for tflite conversion
@@ -104,6 +105,7 @@ class TransducerPrediction(tf.keras.Model):
                 outputs = rnn["projection"](outputs, training=training)
         return outputs
 
+    @tf.function
     def recognize(self, inputs, states, tflite: bool = False):
         """Recognize function for prediction network
 
@@ -148,6 +150,7 @@ class TransducerJointReshape(tf.keras.layers.Layer):
         super().__init__(name=name, trainable=False, **kwargs)
         self.axis = axis
 
+    @tf.function
     def call(self, inputs, repeats=None, **kwargs):
         outputs = tf.expand_dims(inputs, axis=self.axis)
         return tf.repeat(outputs, repeats=repeats, axis=self.axis)
@@ -214,6 +217,7 @@ class TransducerJoint(tf.keras.Model):
             vocabulary_size, name=f"{name}_vocab", kernel_regularizer=kernel_regularizer, bias_regularizer=bias_regularizer
         )
 
+    @tf.function
     def call(self, inputs, training=False, **kwargs):
         # enc has shape [B, T, E]
         # pred has shape [B, U, P]
@@ -355,6 +359,7 @@ class Transducer(BaseModel):
         loss = RnntLoss(blank=blank, global_batch_size=global_batch_size)
         super().compile(loss=loss, optimizer=optimizer, run_eagerly=run_eagerly, **kwargs)
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -371,6 +376,7 @@ class Transducer(BaseModel):
 
     # -------------------------------- INFERENCES -------------------------------------
 
+    @tf.function
     def encoder_inference(
         self,
         features: tf.Tensor,
@@ -388,6 +394,7 @@ class Transducer(BaseModel):
             outputs = self.encoder(outputs, training=False)
             return tf.squeeze(outputs, axis=0)
 
+    @tf.function
     def decoder_inference(
         self,
         encoded: tf.Tensor,
