@@ -151,6 +151,7 @@ class ASRDataset(BaseDataset):
             audio = load_and_convert_to_wav(path).numpy()
             yield bytes(path, "utf-8"), audio, bytes(indices, "utf-8")
 
+    @tf.function
     def preprocess(self, path: tf.Tensor, audio: tf.Tensor, indices: tf.Tensor):
         with tf.device("/CPU:0"):
 
@@ -373,6 +374,7 @@ class ASRSliceDataset(ASRDataset):
     """Dataset for ASR using Slice"""
 
     @staticmethod
+    @tf.function
     def load(record: tf.Tensor):
         def fn(path: bytes):
             return load_and_convert_to_wav(path.decode("utf-8")).numpy()

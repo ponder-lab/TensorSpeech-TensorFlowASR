@@ -41,6 +41,7 @@ class SequenceBatchNorm(tf.keras.layers.Layer):
             trainable=True,
         )
 
+    @tf.function
     def call(
         self,
         inputs,
