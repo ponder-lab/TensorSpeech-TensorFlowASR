@@ -22,6 +22,7 @@ from tensorflow_asr.models.transducer.base_transducer import Transducer
 
 
 class Reshape(tf.keras.layers.Layer):
+    @tf.function
     def call(self, inputs):
         return math_util.merge_two_last_dims(inputs)
 
@@ -67,6 +68,7 @@ class RnnTransducerBlock(tf.keras.Model):
             bias_regularizer=bias_regularizer,
         )
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -83,6 +85,7 @@ class RnnTransducerBlock(tf.keras.Model):
         outputs = self.projection(outputs, training=training)
         return outputs
 
+    @tf.function
     def recognize(
         self,
         inputs,
@@ -161,6 +164,7 @@ class RnnTransducerEncoder(tf.keras.Model):
             states.append(tf.stack(block.rnn.get_initial_state(tf.zeros([batch_size, 1, 1], dtype=tf.float32)), axis=0))
         return tf.stack(states, axis=0)
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -172,6 +176,7 @@ class RnnTransducerEncoder(tf.keras.Model):
             outputs = block(outputs, training=training, **kwargs)
         return outputs
 
+    @tf.function
     def recognize(
         self,
         inputs,
@@ -269,6 +274,7 @@ class RnnTransducer(Transducer):
         self.time_reduction_factor = self.encoder.time_reduction_factor
         self.dmodel = encoder_dmodel
 
+    @tf.function
     def encoder_inference(
         self,
         features: tf.Tensor,

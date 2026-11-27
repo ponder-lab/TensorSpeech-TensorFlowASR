@@ -525,6 +525,7 @@ class SentencePieceFeaturizer(TextFeaturizer):
         indices = self.model.encode_as_ids(text)
         return tf.convert_to_tensor(indices, dtype=tf.int32)
 
+    @tf.function
     def iextract(
         self,
         indices: tf.Tensor,

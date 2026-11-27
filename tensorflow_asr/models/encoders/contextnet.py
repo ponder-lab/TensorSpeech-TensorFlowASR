@@ -36,6 +36,7 @@ def get_activation(
 
 
 class Reshape(tf.keras.layers.Layer):
+    @tf.function
     def call(self, inputs):
         return math_util.merge_two_last_dims(inputs)
 
@@ -237,6 +238,7 @@ class ContextNetEncoder(tf.keras.Model):
                 )
             )
 
+    @tf.function
     def call(
         self,
         inputs,

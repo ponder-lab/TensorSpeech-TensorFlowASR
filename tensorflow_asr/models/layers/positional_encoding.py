@@ -56,6 +56,7 @@ class PositionalEncoding(tf.keras.layers.Layer):
         pe = tf.add(sin, cos)
         return tf.expand_dims(pe, axis=0)  # [1, time, size]
 
+    @tf.function
     def call(
         self,
         inputs,
@@ -95,6 +96,7 @@ class PositionalEncodingConcat(PositionalEncoding):
 
         return tf.expand_dims(pos, axis=0)
 
+    @tf.function
     def call(
         self,
         inputs,

@@ -25,6 +25,7 @@ class GLU(tf.keras.layers.Layer):
         super(GLU, self).__init__(name=name, **kwargs)
         self.axis = axis
 
+    @tf.function
     def call(
         self,
         inputs,
