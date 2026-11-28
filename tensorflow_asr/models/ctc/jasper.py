@@ -52,7 +52,6 @@ class JasperSubBlock(tf.keras.layers.Layer):
         self.do = tf.keras.layers.Dropout(dropout, name=f"{self.name}_dropout")
         self.reduction_factor = strides
 
-    @tf.function
     def call(
         self,
         inputs,
@@ -95,7 +94,6 @@ class JasperResidual(tf.keras.layers.Layer):
         )
         self.bn = tf.keras.layers.BatchNormalization(name=f"{self.name}_bn")
 
-    @tf.function
     def call(
         self,
         inputs,

@@ -44,7 +44,7 @@ class Embedding(tf.keras.layers.Layer):
         )
         self.built = True
 
-    @tf.function(reduce_retracing=True)
+    @tf.function
     def call(self, inputs):
         outputs = tf.cast(inputs, dtype=tf.int32)
         return tf.nn.embedding_lookup(self.embeddings, outputs)

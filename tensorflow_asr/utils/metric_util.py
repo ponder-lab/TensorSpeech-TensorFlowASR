@@ -39,6 +39,7 @@ def execute_wer(
     return tf.convert_to_tensor(dis, tf.float32), tf.convert_to_tensor(length, tf.float32)
 
 
+@tf.function(reduce_retracing=True)
 def wer(
     decode: tf.Tensor,
     target: tf.Tensor,
@@ -66,6 +67,7 @@ def execute_cer(decode, target):
     return tf.convert_to_tensor(dis, tf.float32), tf.convert_to_tensor(length, tf.float32)
 
 
+@tf.function(reduce_retracing=True)
 def cer(
     decode: tf.Tensor,
     target: tf.Tensor,

@@ -151,7 +151,7 @@ class ASRDataset(BaseDataset):
             audio = load_and_convert_to_wav(path).numpy()
             yield bytes(path, "utf-8"), audio, bytes(indices, "utf-8")
 
-    @tf.function
+    @tf.function(reduce_retracing=True)
     def preprocess(self, path: tf.Tensor, audio: tf.Tensor, indices: tf.Tensor):
         with tf.device("/CPU:0"):
 

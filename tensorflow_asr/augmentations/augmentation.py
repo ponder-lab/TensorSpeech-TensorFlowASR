@@ -36,11 +36,9 @@ class Augmentation:
             outputs = tf.where(tf.less(p, self.prob), au.augment(outputs), outputs)
         return outputs
 
-    @tf.function
     def signal_augment(self, inputs):
         return self._augment(inputs, self.signal_augmentations)
 
-    @tf.function
     def feature_augment(self, inputs):
         return self._augment(inputs, self.feature_augmentations)
 

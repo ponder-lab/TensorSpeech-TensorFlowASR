@@ -67,7 +67,6 @@ class ConvModule(tf.keras.layers.Layer):
         self.bn = tf.keras.layers.BatchNormalization(name=f"{self.name}_bn")
         self.activation = get_activation(activation)
 
-    @tf.function
     def call(
         self,
         inputs,
@@ -105,7 +104,6 @@ class SEModule(tf.keras.layers.Layer):
         self.fc1 = tf.keras.layers.Dense(filters // 8, name=f"{self.name}_fc1")
         self.fc2 = tf.keras.layers.Dense(filters, name=f"{self.name}_fc2")
 
-    @tf.function
     def call(
         self,
         inputs,
@@ -195,7 +193,6 @@ class ConvBlock(tf.keras.layers.Layer):
 
         self.activation = get_activation(activation)
 
-    @tf.function
     def call(
         self,
         inputs,
