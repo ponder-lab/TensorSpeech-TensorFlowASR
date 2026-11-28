@@ -109,6 +109,7 @@ class CtcModel(BaseModel):
         logits = self(inputs, training=False)
         probs = tf.nn.softmax(logits["logits"])
 
+        @tf.function
         def map_fn(prob):
             return tf.numpy_function(self._perform_greedy, inp=[prob], Tout=tf.string)
 

@@ -54,7 +54,6 @@ class ConvBlock(tf.keras.layers.Layer):
         self.relu = tf.keras.layers.ReLU(name=f"{self.name}_relu")
         self.do = tf.keras.layers.Dropout(dropout, name=f"{self.name}_dropout")
 
-    @tf.function
     def call(
         self,
         inputs,
@@ -171,7 +170,6 @@ class RnnBlock(tf.keras.layers.Layer):
                 name=f"{self.name}_rowconv",
             )
 
-    @tf.function
     def call(
         self,
         inputs,
@@ -251,7 +249,6 @@ class FcBlock(tf.keras.layers.Layer):
         self.relu = tf.keras.layers.ReLU(name=f"{self.name}_relu")
         self.do = tf.keras.layers.Dropout(dropout, name=f"{self.name}_dropout")
 
-    @tf.function
     def call(
         self,
         inputs,

@@ -115,7 +115,6 @@ class TextFeaturizer(metaclass=abc.ABCMeta):
             blank_like = self.blank * tf.ones_like(indices, dtype=tf.int32)
             return tf.where(indices == minus_one, blank_like, indices)
 
-    @tf.function
     def prepand_blank(
         self,
         text: tf.Tensor,

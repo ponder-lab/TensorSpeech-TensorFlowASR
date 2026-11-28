@@ -43,6 +43,7 @@ class RnntLoss(tf.keras.losses.Loss):
         self.blank = blank
         self.global_batch_size = global_batch_size
 
+    @tf.function
     def call(self, y_true, y_pred):
         loss = rnnt_loss(
             logits=y_pred["logits"],
@@ -97,6 +98,7 @@ def rnnt_loss_warprnnt(
     return loss
 
 
+@tf.function
 def nan_to_zero(
     input_tensor,
 ):
@@ -234,6 +236,7 @@ def backward_dp(
     return beta
 
 
+@tf.function
 def compute_rnnt_loss_and_grad_helper(logits, labels, label_length, logit_length):
     batch_size = tf.shape(logits)[0]
     input_max_len = tf.shape(logits)[1]
