@@ -25,6 +25,7 @@ class CtcLoss(tf.keras.losses.Loss):
         self.blank = blank
         self.global_batch_size = global_batch_size
 
+    @tf.function
     def call(
         self,
         y_true,

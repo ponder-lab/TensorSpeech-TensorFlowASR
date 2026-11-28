@@ -63,7 +63,6 @@ def read_raw_audio(
     return wave
 
 
-@tf.function
 def tf_read_raw_audio(
     audio: tf.Tensor,
     sample_rate=16000,
